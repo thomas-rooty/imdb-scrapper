@@ -46,7 +46,16 @@ def store_series_in_db(series, genre):
 # Streamlit UI
 def show_series():
     st.title("Trouver votre série préférée !")
-    search_genre = st.text_input("Spécifiez un genre", placeholder="Action, Comedy, Drama, ...")
+
+    # List of genres
+    genres = [
+        "Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family",
+        "Fantasy", "Film-noir", "History", "Horror", "Music", "Musical", "Mystery", "News",
+    ]
+
+    # Dropdown for genre selection
+    search_genre = st.selectbox("Choisissez un genre", genres)
+
     num_pages = st.slider("Combien de page à prendre en compte ?", 1, 10, 1)
     search_button = st.button("Lancer la recherche")
 
@@ -82,12 +91,40 @@ def show_series():
             series_list = browser.find_elements(By.CLASS_NAME, "ipc-metadata-list-summary-item__tc")
             for serie in series_list:
                 try:
-                    # Get info about the serie
-                    title = serie.find_element(By.CLASS_NAME, "ipc-title__text").text
-                    year = serie.find_element(By.CLASS_NAME, "dli-title-metadata-item").text
-                    rating = serie.find_element(By.CLASS_NAME, "ipc-rating-star").text
-                    description = serie.find_element(By.CLASS_NAME, "ipc-html-content-inner-div").text
-                    img_url = serie.find_element(By.TAG_NAME, "img").get_attribute("src")
+                    # Initialize default values
+                    title = 'Unknown Title'
+                    year = 'Unknown Year'
+                    rating = 'Unknown Rating'
+                    description = 'No Description Available'
+                    img_url = 'Default_Image_URL'
+
+                    # Try to extract each field, if not found, keep the default value
+                    try:
+                        title = serie.find_element(By.CLASS_NAME, "ipc-title__text").text
+                        title = str(title[3:])
+                    except Exception:
+                        pass
+
+                    try:
+                        year = serie.find_element(By.CLASS_NAME, "dli-title-metadata-item").text
+                    except Exception:
+                        pass
+
+                    try:
+                        rating = serie.find_element(By.CLASS_NAME, "ipc-rating-star").text
+                        rating = str(rating.split(" ")[:3])
+                    except Exception:
+                        pass
+
+                    try:
+                        description = serie.find_element(By.CLASS_NAME, "ipc-html-content-inner-div").text
+                    except Exception:
+                        pass
+
+                    try:
+                        img_url = serie.find_element(By.TAG_NAME, "img").get_attribute("src")
+                    except Exception:
+                        pass
 
                     series.append({
                         'title': title,
