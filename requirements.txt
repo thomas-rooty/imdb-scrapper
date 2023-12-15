@@ -1,3 +1,4 @@
 streamlit~=1.29.0
 selenium~=4.16.0
 SQLAlchemy~=1.4.40
+pandas~=2.1.4

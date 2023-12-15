@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import pandas as pd
 from db import DataBase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -45,7 +46,22 @@ def store_series_in_db(series, genre):
 
 # Streamlit UI
 def show_series():
-    st.title("Trouver votre série préférée !")
+    st.sidebar.title("CARON Thomas")
+
+    # Describe the app
+    st.write("## Description de l'application")
+    st.write("""
+    Cette application permet de trouver des séries sur IMDB.
+    Vous pouvez choisir le genre de la série et le nombre de pages à parcourir.
+    """)
+
+    # Why Selenium?
+    st.write("## Pourquoi Selenium ?")
+    st.write("""
+    Pourquoi Selenium ? Car IMDB utilise du JavaScript pour charger les séries au fur et à mesure que l'on descend sur la page.
+    Il faut donc simuler un scroll pour charger toutes les séries.
+    """)
+    st.write("---")
 
     # List of genres
     genres = [
@@ -56,7 +72,7 @@ def show_series():
     # Dropdown for genre selection
     search_genre = st.selectbox("Choisissez un genre", genres)
 
-    num_pages = st.slider("Combien de page à prendre en compte ?", 1, 10, 1)
+    num_pages = st.slider("Combien de page à prendre en compte ? Une page équivaut à 50 résultats en plus !", 1, 10, 1)
     search_button = st.button("Lancer la recherche")
 
     if search_button:
@@ -143,7 +159,19 @@ def show_series():
 
         # Store and Display the series
         store_series_in_db(series, search_genre)
-        st.write(series)
+
+        # Display the series in a table
+        st.write("Tableau des séries")
+        df = pd.DataFrame(series)
+        st.dataframe(df)
+
+        # Download as CSV
+        st.download_button(
+            label="Télécharger les résultats au format CSV",
+            data=df.to_csv().encode('utf-8'),
+            file_name='dataframe.csv',
+            mime='text/csv',
+        )
 
 
 show_series()
