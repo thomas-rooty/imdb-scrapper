@@ -28,6 +28,9 @@ def show_history():
     # Image on sidebar
     st.sidebar.image("https://www.pngall.com/wp-content/uploads/13/Capybara-PNG-Image.png", width=200)
 
+    # Deployment link
+    st.sidebar.markdown("Lien vers le déploiement: https://imdb-scrapper.streamlit.app/")
+
     # CSS Styles
     css_style = """
     <style>

@@ -51,6 +51,9 @@ def show_series():
     # Image on sidebar
     st.sidebar.image("https://www.pngall.com/wp-content/uploads/13/Capybara-PNG-Image.png", width=200)
 
+    # Deployment link
+    st.sidebar.markdown("Lien vers le déploiement: https://imdb-scrapper.streamlit.app/")
+
     # Describe the app
     st.write("## Description de l'application")
     st.write("""
