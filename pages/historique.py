@@ -7,6 +7,7 @@ st.title("Historique des recherches")
 
 # Processor
 processor = Processor()
+IMDB_BASE_URL = "https://www.imdb.com/"
 
 
 # DB functions
@@ -30,6 +31,8 @@ def show_history():
 
     # Deployment link
     st.sidebar.markdown("Lien vers le déploiement: https://imdb-scrapper.streamlit.app/")
+
+    st.sidebar.markdown("IMDB: " + IMDB_BASE_URL)
 
     # CSS Styles
     css_style = """

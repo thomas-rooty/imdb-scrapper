@@ -54,12 +54,16 @@ def show_series():
     # Deployment link
     st.sidebar.markdown("Lien vers le déploiement: https://imdb-scrapper.streamlit.app/")
 
+    st.sidebar.markdown("IMDB: " + IMDB_BASE_URL)
+
     # Describe the app
     st.write("## Description de l'application")
     st.write("""
     Cette application permet de trouver des séries sur IMDB.
     Vous pouvez choisir le genre de la série et le nombre de pages à parcourir.
     """)
+
+    st.write(IMDB_BASE_URL)
 
     # Why Selenium?
     st.write("## Pourquoi Selenium ?")
