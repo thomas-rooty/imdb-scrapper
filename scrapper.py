@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from time import sleep
 
 # Constants and Environment Variables
@@ -30,7 +31,8 @@ def init_browser():
     service = Service(GeckoDriverManager().install())
     # options.add_argument("--headless") # The button "See more" is not visible in headless mode
     #service = Service(executable_path=DRIVER_PATH)
-    return webdriver.Firefox(service=service, options=options)
+    binary = FirefoxBinary('/usr/local/bin/firefox-esr')
+    return webdriver.Firefox(service=service, options=options, firefox_binary=binary)
 
 
 # DB functions
