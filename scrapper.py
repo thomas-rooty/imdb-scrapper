@@ -72,7 +72,7 @@ def show_series():
     # Dropdown for genre selection
     search_genre = st.selectbox("Choisissez un genre", genres)
 
-    num_pages = st.slider("Combien de page à prendre en compte ? Une page équivaut à 50 résultats en plus !", 1, 10, 1)
+    num_pages = st.slider("Combien de page à prendre en compte ? Une page équivaut à 50 résultats en plus !", 1, 30, 1)
     search_button = st.button("Lancer la recherche")
 
     if search_button:
