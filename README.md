@@ -27,7 +27,7 @@ Set your OpenAI API Key under .streamlit > secrets.toml file
 Run the Streamlit application locally:
 
 ```bash
-streamlit run app.py
+streamlit run scrapper.py
 ```
 
 ## File Structure
