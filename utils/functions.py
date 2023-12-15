@@ -1,11 +1,12 @@
-import dotenv
 import openai
+import dotenv
+import streamlit as st
 
 
 class Processor:
     def __init__(self):
         self.openai = openai
-        self.openai.api_key = dotenv.get_key('.env', 'OPENAI_API_KEY')
+        self.openai.api_key = st.secrets["OPENAI_API_KEY"] or dotenv.get_key("OPENAI_API_KEY") or None
 
     def translate_text(self, text):
         response = self.openai.Completion.create(
