@@ -1,11 +1,12 @@
 import streamlit as st
-from db import DataBase
+from utils.db import DataBase
+from utils.functions import Processor
 
-# Constants and Environment Variables
-IMDB_BASE_URL = "https://www.imdb.com/"
-
-# Streamlit home page
+# Streamlit history page
 st.title("Historique des recherches")
+
+# Processor
+processor = Processor()
 
 
 # DB functions
@@ -20,7 +21,7 @@ def get_series_from_db():
     return database.select_table('series')
 
 
-# Streamlit UI
+# Streamlit UI for History
 def show_history():
     st.sidebar.title("CARON Thomas")
 
@@ -44,6 +45,7 @@ def show_history():
         st.markdown(css_style + "<div class='serie-info'>Aucune recherche effectuée</div>", unsafe_allow_html=True)
         return
 
+    # Displaying each serie
     for serie in series:
         st.markdown(f"""
             <div class='serie'>
@@ -60,12 +62,26 @@ def show_history():
                     <div class='serie-description'>{serie.description}</div>
                 </div>
             </div>
-            <div class='separator'></div>
         """, unsafe_allow_html=True)
+
+        # Buttons for summary and translation
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Résumé", key=f"summarize_{serie.title}"):
+                summary = processor.summarize_text(serie.description)
+                st.write(summary)
+
+        with col2:
+            if st.button("Traduire", key=f"translate_{serie.title}"):
+                translation = processor.translate_text(serie.description)
+                st.write(translation)
+
+        st.markdown("<div class='separator'></div>", unsafe_allow_html=True)
 
     st.markdown(css_style + "<div class='serie-info'>## Recherchez une nouvelle série</div>", unsafe_allow_html=True)
     st.markdown("<div class='serie-info'>Utilisez le menu de gauche pour rechercher une nouvelle série</div>",
                 unsafe_allow_html=True)
 
 
+# Call the show_history function
 show_history()

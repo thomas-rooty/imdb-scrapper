@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import pandas as pd
-from db import DataBase
+from utils.db import DataBase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
