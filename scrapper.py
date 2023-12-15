@@ -10,7 +10,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 from time import sleep
 
 # Constants and Environment Variables
-DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "./chromedriver.exe")
+#DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "./chromedriver.exe")
 BRAVE_PATH = os.getenv(
     "BRAVE_BROWSER_PATH",
     "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
