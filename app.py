@@ -25,7 +25,7 @@ def init_browser():
     options = Options()
     options.binary_location = BRAVE_PATH
     options.add_argument("--incognito")
-    # options.add_argument("--headless")
+    # options.add_argument("--headless") # The button "See more" is not visible in headless mode
     service = Service(executable_path=DRIVER_PATH)
     return webdriver.Chrome(service=service, options=options)
 
@@ -64,7 +64,7 @@ def show_series():
 
         series = []
 
-        # Navigate through pages
+        # Navigate through pages to load all series
         for page in range(1, num_pages):
             try:
                 browser.implicitly_wait(1)
@@ -102,7 +102,7 @@ def show_series():
         except Exception as e:
             st.error("Error getting series: " + str(e))
 
-        # browser.quit()
+        browser.quit()
 
         # Store and Display the series
         store_series_in_db(series, search_genre)
