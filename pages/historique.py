@@ -1,0 +1,71 @@
+import streamlit as st
+from db import DataBase
+
+# Constants and Environment Variables
+IMDB_BASE_URL = "https://www.imdb.com/"
+
+# Streamlit home page
+st.title("Historique des recherches")
+
+
+# DB functions
+def get_series_from_db():
+    database = DataBase()
+    try:
+        database.create_table('series', 'title', 'year', 'rating', 'description', 'img_url', 'genre')
+    except Exception as e:
+        st.error("Database error: " + str(e))
+        return
+
+    return database.select_table('series')
+
+
+# Streamlit UI
+def show_history():
+    st.sidebar.title("CARON Thomas")
+
+    # CSS Styles
+    css_style = """
+    <style>
+        .serie { display: flex; flex-direction: column; align-items: flex-start; }
+        .top { display: flex; flex-direction: row; align-items: center; }
+        .top-container { display: flex; flex-direction: column; align-items: flex-start; margin-left: 10px; }
+        .bottom { display: flex; flex-direction: column; align-items: flex-start; }
+        .serie-title { font-size: 20px; font-weight: bold; }
+        .serie-info { font-size: 16px; margin-bottom: 5px; }
+        .serie-description { margin-top: 10px; }
+        .serie-image { width: 100px; height: auto; }
+        .separator { margin-top: 20px; margin-bottom: 20px; border-bottom: 1px solid #eee; }
+    </style>
+    """
+
+    series = get_series_from_db()
+    if not series:
+        st.markdown(css_style + "<div class='serie-info'>Aucune recherche effectuée</div>", unsafe_allow_html=True)
+        return
+
+    for serie in series:
+        st.markdown(f"""
+            <div class='serie'>
+                <div class='top'>
+                    <img class='serie-image' src='{serie.img_url}' alt='Serie Image'>
+                    <div class='top-container'>
+                        <div class='serie-title'>{serie.title}</div>
+                        <div class='serie-info'><strong>Année de sortie:</strong> {serie.year}</div>
+                        <div class='serie-info'><strong>Note:</strong> {serie.rating}</div>
+                        <div class='serie-info'><strong>Genre:</strong> {serie.genre}</div>
+                    </div>
+                </div>
+                <div class='bottom'>
+                    <div class='serie-description'>{serie.description}</div>
+                </div>
+            </div>
+            <div class='separator'></div>
+        """, unsafe_allow_html=True)
+
+    st.markdown(css_style + "<div class='serie-info'>## Recherchez une nouvelle série</div>", unsafe_allow_html=True)
+    st.markdown("<div class='serie-info'>Utilisez le menu de gauche pour rechercher une nouvelle série</div>",
+                unsafe_allow_html=True)
+
+
+show_history()
