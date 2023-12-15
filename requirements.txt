@@ -4,3 +4,4 @@ SQLAlchemy~=1.4.40
 pandas~=2.1.4
 python-dotenv==1.0.0
 openai==0.28.0
+webdriver-manager==4.0.1
