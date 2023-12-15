@@ -26,7 +26,7 @@ st.title("Capybar'App")
 def init_browser():
     options = Options()
     options.add_argument("--incognito")
-    options.binary_location = BRAVE_PATH
+    # options.binary_location = BRAVE_PATH
     service = Service(GeckoDriverManager().install())
     # options.add_argument("--headless") # The button "See more" is not visible in headless mode
     #service = Service(executable_path=DRIVER_PATH)
