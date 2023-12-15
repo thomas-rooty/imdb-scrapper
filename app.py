@@ -5,9 +5,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from time import sleep
 
 # Constants and Environment Variables
-# Change this if you use another browser !
 DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "./chromedriver.exe")
 BRAVE_PATH = os.getenv(
     "BRAVE_BROWSER_PATH",
@@ -25,7 +25,7 @@ def init_browser():
     options = Options()
     options.binary_location = BRAVE_PATH
     options.add_argument("--incognito")
-    #options.add_argument("--headless")
+    # options.add_argument("--headless")
     service = Service(executable_path=DRIVER_PATH)
     return webdriver.Chrome(service=service, options=options)
 
@@ -63,48 +63,49 @@ def show_series():
             return
 
         series = []
-        for page in range(1, num_pages + 1):
+
+        # Navigate through pages
+        for page in range(1, num_pages):
             try:
-                # Wait for the page to load
-                browser.implicitly_wait(2.5)
-
-                # Find all series on the current page
-                series_list = browser.find_elements(By.CLASS_NAME, "ipc-metadata-list-summary-item__tc")
-
-                for serie in series_list:
-                    try:
-                        # Get info about the serie
-                        title = serie.find_element(By.CLASS_NAME, "ipc-title__text").text
-                        year = serie.find_element(By.CLASS_NAME, "dli-title-metadata-item").text
-                        rating = serie.find_element(By.CLASS_NAME, "ipc-rating-star").text
-                        description = serie.find_element(By.CLASS_NAME, "ipc-html-content-inner-div").text
-                        img_url = serie.find_element(By.TAG_NAME, "img").get_attribute("src")
-
-                        series.append({
-                            'title': title,
-                            'year': year,
-                            'rating': rating,
-                            'description': description,
-                            'img_url': img_url
-                        })
-                    except Exception as e:
-                        st.error("Error getting serie info: " + str(e))
-                        continue
-
-                # Show 50 more series if asked to
-                if page > 1:
-                    next_button = browser.find_element(By.CLASS_NAME, "ipc-see-more__button")
-                    next_button.click()
+                browser.implicitly_wait(1)
+                browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                sleep(1)
+                button = browser.find_element(By.CLASS_NAME, "ipc-see-more__button")
+                button.click()
+                sleep(3)
             except Exception as e:
-                st.error("Error getting series: " + str(e))
+                st.error("Error navigating pages: " + str(e))
                 continue
 
-        browser.quit()
+        # Scrape series from all loaded pages
+        try:
+            series_list = browser.find_elements(By.CLASS_NAME, "ipc-metadata-list-summary-item__tc")
+            for serie in series_list:
+                try:
+                    # Get info about the serie
+                    title = serie.find_element(By.CLASS_NAME, "ipc-title__text").text
+                    year = serie.find_element(By.CLASS_NAME, "dli-title-metadata-item").text
+                    rating = serie.find_element(By.CLASS_NAME, "ipc-rating-star").text
+                    description = serie.find_element(By.CLASS_NAME, "ipc-html-content-inner-div").text
+                    img_url = serie.find_element(By.TAG_NAME, "img").get_attribute("src")
 
-        # Store the series in the database
+                    series.append({
+                        'title': title,
+                        'year': year,
+                        'rating': rating,
+                        'description': description,
+                        'img_url': img_url
+                    })
+                except Exception as e:
+                    st.error("Error getting serie info: " + str(e))
+                    continue
+        except Exception as e:
+            st.error("Error getting series: " + str(e))
+
+        # browser.quit()
+
+        # Store and Display the series
         store_series_in_db(series, search_genre)
-
-        # Display the series
         st.write(series)
 
 
