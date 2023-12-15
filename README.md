@@ -20,6 +20,10 @@ pip install -r requirements.txt
 ```
 
 ## Usage
+### Secrets
+Set your OpenAI API Key under .streamlit > secrets.toml file
+
+### Start app
 Run the Streamlit application locally:
 
 ```bash
