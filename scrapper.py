@@ -1,12 +1,24 @@
 import streamlit as st
-import os
+import os, sys
 import pandas as pd
 from utils.db import DataBase
+from time import sleep
+
+
+@st.experimental_singleton
+def installff():
+    os.system('sbase install geckodriver')
+    os.system(
+        'ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+
+
+_ = installff()
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from time import sleep
+from selenium.webdriver import FirefoxOptions
+
 
 # Constants and Environment Variables
 DRIVER_PATH = os.getenv("CHROME_DRIVER_PATH", "./chromedriver.exe")
@@ -23,12 +35,13 @@ st.title("Capybar'App")
 
 # Functions
 def init_browser():
-    options = Options()
-    options.binary_location = BRAVE_PATH
+    #options = Options()
+    #options.binary_location = BRAVE_PATH
+    options = FirefoxOptions()
     options.add_argument("--incognito")
     # options.add_argument("--headless") # The button "See more" is not visible in headless mode
     service = Service(executable_path=DRIVER_PATH)
-    return webdriver.Chrome(service=service, options=options)
+    return webdriver.Firefox(service=service, options=options)
 
 
 # DB functions
