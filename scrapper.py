@@ -48,6 +48,9 @@ def store_series_in_db(series, genre):
 def show_series():
     st.sidebar.title("CARON Thomas")
 
+    # Image on sidebar
+    st.sidebar.image("https://www.pngall.com/wp-content/uploads/13/Capybara-PNG-Image.png", width=200)
+
     # Describe the app
     st.write("## Description de l'application")
     st.write("""

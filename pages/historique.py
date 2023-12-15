@@ -25,6 +25,9 @@ def get_series_from_db():
 def show_history():
     st.sidebar.title("CARON Thomas")
 
+    # Image on sidebar
+    st.sidebar.image("https://www.pngall.com/wp-content/uploads/13/Capybara-PNG-Image.png", width=200)
+
     # CSS Styles
     css_style = """
     <style>
